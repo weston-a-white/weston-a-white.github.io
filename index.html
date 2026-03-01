@@ -37,8 +37,6 @@
             line-height: 1.7;
             color: #555;
             margin-bottom: 1.5rem;
-            opacity: 0;
-            transition: opacity 0.5s ease;
         }
 
         ul {
@@ -47,8 +45,6 @@
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
-            opacity: 0;
-            transition: opacity 0.5s ease;
         }
 
         ul li a {
@@ -69,64 +65,16 @@
             content: "→ ";
             color: #aaa;
         }
-
-        .visible {
-            opacity: 1 !important;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 id="scramble"></h1>
-        <p id="subtitle">This website is currently a work in progress. In the meantime you can find my work at:</p>
-        <ul id="links">
+        <h1>Hey there! I'm Weston.</h1>
+        <p>This website is currently a work in progress. In the meantime you can find my work at:</p>
+        <ul>
             <li><a href="https://westonawhite7.wixsite.com/westonawhite" target="_blank">My current website</a></li>
             <li><a href="https://www.linkedin.com/in/westonawhite/" target="_blank">LinkedIn</a></li>
         </ul>
     </div>
-
-    <script>
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-
-        function scramble(el, finalText, duration, onDone) {
-            let start = null;
-
-            function randomChar() {
-                return chars[Math.floor(Math.random() * chars.length)];
-            }
-
-            function frame(timestamp) {
-                if (!start) start = timestamp;
-                const progress = Math.min((timestamp - start) / duration, 1);
-
-                el.textContent = finalText
-                    .split('')
-                    .map((char) => {
-                        if (char === ' ') return ' ';
-                        if (Math.random() < progress) return char;
-                        return randomChar();
-                    })
-                    .join('');
-
-                if (progress < 1) {
-                    requestAnimationFrame(frame);
-                } else {
-                    el.textContent = finalText;
-                    if (onDone) onDone();
-                }
-            }
-
-            requestAnimationFrame(frame);
-        }
-
-        const heading = document.getElementById('scramble');
-        const subtitle = document.getElementById('subtitle');
-        const links = document.getElementById('links');
-
-        scramble(heading, "Hey there! I'm Weston.", 2000, () => {
-            subtitle.classList.add('visible');
-            setTimeout(() => links.classList.add('visible'), 400);
-        });
-    </script>
 </body>
 </html>
