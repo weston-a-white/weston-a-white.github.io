@@ -5,18 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weston White</title>
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+
+        body {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: Arial, sans-serif;
-            background-color: white;
+            background-color: #f9f9f9;
+            color: #222;
+        }
+
+        .container {
+            max-width: 480px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #222;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 2px;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        ul li a:hover {
+            color: #000;
+            border-color: #000;
+        }
+
+        ul li::before {
+            content: "→ ";
+            color: #aaa;
+        }
+
+        .visible {
+            opacity: 1 !important;
         }
     </style>
 </head>
 <body>
-    <p>hello world</p>
+    <div class="container">
+        <h1 id="scramble"></h1>
+        <p id="subtitle">This website is currently a work in progress. In the meantime you can find my work at:</p>
+        <ul id="links">
+            <li><a href="https://westonawhite7.wixsite.com/westonawhite" target="_blank">My current website</a></li>
+            <li><a href="https://www.linkedin.com/in/westonawhite/" target="_blank">LinkedIn</a></li>
+        </ul>
+    </div>
+
+    <script>
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+
+        function scramble(el, finalText, duration, onDone) {
+            let start = null;
+
+            function randomChar() {
+                return chars[Math.floor(Math.random() * chars.length)];
+            }
+
+            function frame(timestamp) {
+                if (!start) start = timestamp;
+                const progress = Math.min((timestamp - start) / duration, 1);
+
+                el.textContent = finalText
+                    .split('')
+                    .map((char) => {
+                        if (char === ' ') return ' ';
+                        if (Math.random() < progress) return char;
+                        return randomChar();
+                    })
+                    .join('');
+
+                if (progress < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    el.textContent = finalText;
+                    if (onDone) onDone();
+                }
+            }
+
+            requestAnimationFrame(frame);
+        }
+
+        const heading = document.getElementById('scramble');
+        const subtitle = document.getElementById('subtitle');
+        const links = document.getElementById('links');
+
+        scramble(heading, "Hey there! I'm Weston.", 2000, () => {
+            subtitle.classList.add('visible');
+            setTimeout(() => links.classList.add('visible'), 400);
+        });
+    </script>
 </body>
 </html>
