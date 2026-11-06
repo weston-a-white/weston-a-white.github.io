@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A card for Mom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e6d9f8; --hint:#4a2c63; --plum:#3a1f4d; --sun:#ffd75e; --paper:#fff6f9; --paper2:#ffe1ea; --line:#f1c3d2;
+  --display:"Caprasimo",Georgia,serif; --hand:"Caveat","Segoe Print","Bradley Hand",cursive;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#1d1229; --hint:#d9c6ee; color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#1d1229; --hint:#d9c6ee; color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--hint);font-family:var(--hand);overflow-x:hidden}
+
+.stage{
+  --w:min(330px,40vw); --h:calc(var(--w)*1.45);
+  perspective:1800px; display:flex; justify-content:center; align-items:flex-start;
+  padding:56px 16px 24px; min-height:calc(var(--h) + 80px); box-sizing:border-box;
+}
+.book{
+  --u:calc(var(--w)/100);
+  position:relative; width:var(--w); height:var(--h); transform-style:preserve-3d; cursor:pointer;
+  transition:transform .9s cubic-bezier(.55,0,.25,1); outline:none; -webkit-tap-highlight-color:transparent;
+}
+.book:focus-visible{outline:3px solid var(--sun); outline-offset:10px; border-radius:12px}
+.book.open{transform:translateX(calc(var(--w)/2))}
+
+.page,.face{position:absolute; inset:0; border-radius:0 calc(var(--u)*2) calc(var(--u)*2) 0; box-sizing:border-box; overflow:hidden}
+.page{background:var(--paper); transform:translateZ(-1px); box-shadow:0 calc(var(--u)*2) calc(var(--u)*6) rgba(20,5,35,.35); padding:calc(var(--u)*9) calc(var(--u)*8) calc(var(--u)*8) calc(var(--u)*9); display:flex; flex-direction:column; color:var(--plum)}
+.page .big{font-family:var(--display); font-size:calc(var(--u)*11); line-height:1.08; margin:0}
+.page .small{font-family:var(--hand); font-weight:700; font-size:calc(var(--u)*10.5); line-height:1.05; margin:calc(var(--u)*3) 0 0}
+.note{
+  flex:1; margin-top:calc(var(--u)*6);
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--u)*8 - 1.5px),var(--line) calc(var(--u)*8 - 1.5px),var(--line) calc(var(--u)*8));
+}
+
+.cover{position:absolute; inset:0; transform-style:preserve-3d; transform-origin:left center; transition:transform 1s cubic-bezier(.55,0,.25,1)}
+.book.open .cover{transform:rotateY(-180deg)}
+.face{backface-visibility:hidden; -webkit-backface-visibility:hidden; box-shadow:0 calc(var(--u)*2) calc(var(--u)*6) rgba(20,5,35,.3)}
+.front{
+  background:
+    radial-gradient(circle at 12% 10%,#ff8fb1 0 calc(var(--u)*1.3),transparent calc(var(--u)*1.4)),
+    radial-gradient(circle at 88% 8%,#7fd6c2 0 calc(var(--u)*1.6),transparent calc(var(--u)*1.7)),
+    radial-gradient(circle at 80% 30%,#ff8fb1 0 calc(var(--u)*1),transparent calc(var(--u)*1.1)),
+    radial-gradient(circle at 8% 38%,#7fd6c2 0 calc(var(--u)*1.1),transparent calc(var(--u)*1.2)),
+    var(--sun);
+  display:flex; flex-direction:column; padding:calc(var(--u)*7) calc(var(--u)*7) 0; color:var(--plum); text-align:center;
+}
+.front .msg{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center}
+.front .frac{font-family:var(--display); font-size:calc(var(--u)*34); line-height:.9; margin:0}
+.front .txt{font-family:var(--display); font-size:calc(var(--u)*9.5); line-height:1.12; margin:calc(var(--u)*3) 0 0; max-width:calc(var(--u)*80)}
+.cats{display:flex; justify-content:space-between; align-items:flex-end; padding:0 calc(var(--u)*1); position:relative; z-index:1}
+.cats svg{width:calc(var(--u)*20); display:block; overflow:visible}
+.shelf{height:calc(var(--u)*5); margin:calc(var(--u)*-1.2) calc(var(--u)*-7) 0; background:var(--plum)}
+
+.back{
+  transform:rotateY(180deg); background:
+    radial-gradient(circle at 14% 12%,#ffd75e 0 calc(var(--u)*1.6),transparent calc(var(--u)*1.7)),
+    radial-gradient(circle at 86% 18%,#7fd6c2 0 calc(var(--u)*1.4),transparent calc(var(--u)*1.5)),
+    radial-gradient(circle at 20% 78%,#ff8fb1 0 calc(var(--u)*1.2),transparent calc(var(--u)*1.3)),
+    radial-gradient(circle at 90% 70%,#ffd75e 0 calc(var(--u)*1.5),transparent calc(var(--u)*1.6)),
+    var(--paper2);
+  display:flex; align-items:center; justify-content:center;
+}
+.back .hero{width:calc(var(--u)*66); position:relative; margin-top:calc(var(--u)*6)}
+.back .hero svg{width:100%; display:block; overflow:visible}
+.back .rug{position:absolute; left:8%; right:8%; bottom:calc(var(--u)*-1.5); height:calc(var(--u)*5); background:rgba(58,31,77,.18); border-radius:50%; z-index:0}
+.hearts{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
+
+.hint{text-align:center; margin:0; padding:8px 16px 40px; font-size:24px; font-weight:700}
+
+@media (max-width:699px){
+  .stage{--w:min(300px,80vw); transition:min-height 1s cubic-bezier(.55,0,.25,1)}
+  .stage.open{min-height:calc(var(--h)*2 + 80px)}
+  .book.open{transform:translateY(var(--h))}
+  .cover{transform-origin:center top}
+  .book.open .cover{transform:rotateX(180deg)}
+  .back{transform:rotateX(180deg)}
+  .face,.page{border-radius:calc(var(--u)*2)}
+}
+@media (hover:hover) and (min-width:700px){
+  .book:not(.open):hover .cover{transform:rotateY(-14deg)}
+}
+@media (prefers-reduced-motion:reduce){
+  .book,.cover,.stage{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="cat" stroke="#2b1b38" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M74 100 C98 100 100 68 86 60" fill="none" stroke-width="12"/>
+      <path d="M74 100 C98 100 100 68 86 60" fill="none" stroke-width="6" style="stroke:var(--fur)"/>
+      <path d="M24 38 L27 10 L46 27 Z M76 38 L73 10 L54 27 Z" style="fill:var(--fur)"/>
+      <ellipse cx="50" cy="88" rx="27" ry="21" style="fill:var(--fur)"/>
+      <ellipse cx="50" cy="93" rx="13" ry="13" stroke="none" style="fill:var(--belly)"/>
+      <ellipse cx="38" cy="106" rx="9" ry="5" style="fill:var(--belly)"/>
+      <ellipse cx="62" cy="106" rx="9" ry="5" style="fill:var(--belly)"/>
+      <ellipse cx="50" cy="48" rx="28" ry="24" style="fill:var(--fur)"/>
+      <path d="M30 33 L30 18 L40 27 Z M70 33 L70 18 L60 27 Z" fill="#f3a6b8" stroke="none"/>
+      <path d="M46 54 h8 l-4 4 Z" fill="#f08aa4" stroke-width="1.5"/>
+      <path d="M50 58 q-3 5 -8 3 M50 58 q3 5 8 3" fill="none" stroke-width="2"/>
+      <path d="M30 54 L14 51 M30 59 L14 62 M70 54 L86 51 M70 59 L86 62" fill="none" stroke-width="2"/>
+    </g>
+    <g id="eyes-meh" stroke="#2b1b38" stroke-width="3" stroke-linecap="round">
+      <path d="M33 46 a6 6 0 0 0 12 0 Z M55 46 a6 6 0 0 0 12 0 Z" stroke="none" fill="#e8dc7a"/>
+      <ellipse cx="39" cy="48.5" rx="1.6" ry="3.2" stroke="none" fill="#2b1b38"/>
+      <ellipse cx="61" cy="48.5" rx="1.6" ry="3.2" stroke="none" fill="#2b1b38"/>
+      <path d="M32 46 H46 M54 46 H68" fill="none"/>
+    </g>
+    <g id="eyes-care">
+      <circle cx="39" cy="46" r="6.5" fill="#2b1b38"/><circle cx="61" cy="46" r="6.5" fill="#2b1b38"/>
+      <circle cx="41" cy="44" r="2.2" fill="#fff"/><circle cx="63" cy="44" r="2.2" fill="#fff"/>
+      <ellipse cx="28" cy="57" rx="5" ry="3" fill="#ff8fb1" opacity=".7"/>
+      <ellipse cx="72" cy="57" rx="5" ry="3" fill="#ff8fb1" opacity=".7"/>
+    </g>
+    <g id="hat" stroke="#2b1b38" stroke-width="3" stroke-linejoin="round" transform="rotate(-12 50 30)">
+      <path d="M35 30 L50 -4 L65 30 Z" fill="#ff5d8f"/>
+      <path d="M43 14 L57 14 M39 23 L61 23" stroke="#fff" stroke-width="3" fill="none"/>
+      <circle cx="50" cy="-5" r="5" fill="#ffd75e"/>
+    </g>
+    <path id="heart" d="M0 -3 C-6 -10 -14 0 0 10 C14 0 6 -10 0 -3Z"/>
+  </defs>
+</svg>
+
+<main class="stage" id="stage">
+  <div class="book" id="book" role="button" tabindex="0" aria-expanded="false" aria-label="Birthday card. Press to open.">
+
+    <!-- Inside, right-hand page -->
+    <section class="page">
+      <p class="big">Okay.</p>
+      <p class="big">It’s actually 5/5.</p>
+      <p class="small">But I care, and that’s all that matters.</p>
+      <!-- Space for your own message: the lined area below is empty on purpose. -->
+      <div class="note" id="message" aria-label="Space for a personal message"></div>
+    </section>
+
+    <div class="cover">
+      <!-- Front cover -->
+      <div class="face front">
+        <div class="msg">
+          <p class="frac">4/5</p>
+          <p class="txt">cats don’t care that it’s your birthday</p>
+        </div>
+        <div class="cats" role="img" aria-label="Four unimpressed cats">
+          <svg viewBox="0 0 100 112" style="--fur:#e9a15a;--belly:#fbe3c2"><use href="#cat"/><use href="#eyes-meh"/></svg>
+          <svg viewBox="0 0 100 112" style="--fur:#a9b0ba;--belly:#e4e8ee"><use href="#cat"/><use href="#eyes-meh"/></svg>
+          <svg viewBox="0 0 100 112" style="--fur:#4d4656;--belly:#8a8394"><use href="#cat"/><use href="#eyes-meh"/></svg>
+          <svg viewBox="0 0 100 112" style="--fur:#f1dcc0;--belly:#fff6ea"><use href="#cat"/><use href="#eyes-meh"/></svg>
+        </div>
+        <div class="shelf"></div>
+      </div>
+
+      <!-- Inside, left-hand page (back of the cover) -->
+      <div class="face back">
+        <div class="hero" role="img" aria-label="A fifth cat in a party hat, who cares">
+          <svg viewBox="0 -14 100 126" style="--fur:#fffaf2;--belly:#ffffff"><use href="#cat"/><use href="#eyes-care"/><use href="#hat"/></svg>
+          <div class="rug"></div>
+        </div>
+        <svg class="hearts" viewBox="0 0 100 145" aria-hidden="true">
+          <use href="#heart" transform="translate(22 38) scale(1.5) rotate(-12)" fill="#ff5d8f"/>
+          <use href="#heart" transform="translate(80 52) scale(1.1) rotate(14)" fill="#ff8fb1"/>
+          <use href="#heart" transform="translate(70 24) scale(.8) rotate(-6)" fill="#ff5d8f"/>
+          <use href="#heart" transform="translate(16 106) scale(.9) rotate(10)" fill="#ff8fb1"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</main>
+<p class="hint" id="hint">Tap the card to open it</p>
+
+<script>
+(function(){
+  var book=document.getElementById('book'), stage=document.getElementById('stage'), hint=document.getElementById('hint');
+  function toggle(){
+    var open=book.classList.toggle('open');
+    stage.classList.toggle('open',open);
+    book.setAttribute('aria-expanded',open);
+    book.setAttribute('aria-label','Birthday card. Press to '+(open?'close':'open')+'.');
+    hint.textContent=open?'Tap the card to close it':'Tap the card to open it';
+  }
+  book.addEventListener('click',toggle);
+  book.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}
+  });
+})();
+</script>
+</body>
+</html>
