@@ -6,7 +6,7 @@
 <title>A card for Mom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#e8e7e4; --hint:#5a5a5a; --plum:#3a1f4d; --ink:#1d2b3a; --paper:#fff7fa; --pink:#ff5d8f;
@@ -23,9 +23,9 @@ html,body{margin:0;min-height:100%}
 body{background:var(--bg);color:var(--hint);overflow-x:hidden}
 
 .stage{
-  --w:min(45vw,58vh,640px); --r:1.4; --fs:3.9; --h:calc(var(--w)*var(--r));
+  --w:min(45vw,58vh,640px); --r:1.4; --fs:3.9; --h:calc(var(--w)*var(--r)); --tk:calc(var(--w)*.56);
   perspective:2200px; display:flex; justify-content:center; align-items:flex-start;
-  padding:40px 16px 20px; min-height:calc(var(--h) + 60px); box-sizing:border-box;
+  padding:40px 16px 20px; min-height:calc(var(--h) + 60px); box-sizing:border-box; transition:min-height 1s cubic-bezier(.55,0,.25,1);
 }
 .book{
   --u:calc(var(--w)/100);
@@ -33,6 +33,24 @@ body{background:var(--bg);color:var(--hint);overflow-x:hidden}
   transition:transform .9s cubic-bezier(.55,0,.25,1); outline:none; -webkit-tap-highlight-color:transparent;
 }
 .book:focus-visible{outline:3px solid var(--pink); outline-offset:10px; border-radius:12px}
+.stage.open{min-height:calc(var(--h) + var(--tk) + 60px)}
+
+.ticket{position:absolute; left:50%; top:100%; width:calc(var(--u)*78); margin-left:calc(var(--u)*-39); visibility:hidden; opacity:0; pointer-events:none; filter:drop-shadow(0 calc(var(--u)*1.2) calc(var(--u)*1.6) rgba(20,5,35,.35)); transform:translate3d(0,calc(var(--u)*4),2px) rotate(-4deg)}
+.book.open .ticket{animation:drop 1.6s cubic-bezier(.25,.6,.3,1) .9s both}
+@keyframes drop{
+  0%{visibility:visible; opacity:0; transform:translate3d(0,calc(var(--h)*-.5),2px) rotate(7deg)}
+  15%{opacity:1}
+  100%{visibility:visible; opacity:1; transform:translate3d(0,calc(var(--u)*4),2px) rotate(-3deg)}
+}
+.tk{position:relative; background:#fffaf0; color:#2b1b38; font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif; text-align:center; padding:calc(var(--u)*5.5) calc(var(--u)*5) calc(var(--u)*5); border:calc(var(--u)*.45) solid #b8913f; border-radius:calc(var(--u)*.8); outline:calc(var(--u)*.2) solid #b8913f; outline-offset:calc(var(--u)*-1.8)}
+.tk p{margin:0}
+.tk .a{font-style:italic; font-weight:500; font-size:calc(var(--u)*4.2); line-height:1.3}
+.tk .b,.tk .d{font-weight:600; font-size:calc(var(--u)*4.6); line-height:1.3; letter-spacing:.02em}
+.tk .c{font-weight:600; font-size:calc(var(--u)*6); line-height:1.2; white-space:nowrap; margin:calc(var(--u)*.6) 0}
+.tk .orn{height:calc(var(--u)*.3); width:calc(var(--u)*22); margin:calc(var(--u)*3) auto calc(var(--u)*2.6); background:linear-gradient(90deg,transparent,#b8913f,transparent)}
+.tk .f{font-style:italic; font-weight:600; font-size:calc(var(--u)*3.1); line-height:1.3; opacity:.8}
+.tk .seal{position:absolute; right:calc(var(--u)*6); bottom:calc(var(--u)*-3.2); width:calc(var(--u)*9); height:calc(var(--u)*9); border-radius:50%; background:radial-gradient(circle at 35% 30%,#c9355c,#861634 70%); box-shadow:0 calc(var(--u)*.6) calc(var(--u)*1) rgba(0,0,0,.3)}
+.tk .seal::after{content:""; position:absolute; inset:calc(var(--u)*1.5); border-radius:50%; border:calc(var(--u)*.4) solid rgba(255,255,255,.35)}
 .book.open{transform:translateX(calc(var(--w)/2))}
 
 .page,.face{position:absolute; inset:0; border-radius:0 calc(var(--u)*2) calc(var(--u)*2) 0; box-sizing:border-box; overflow:hidden; background:var(--paper)}
@@ -57,7 +75,7 @@ body{background:var(--bg);color:var(--hint);overflow-x:hidden}
 
 @media (max-width:699px){
   .stage{--w:min(calc(100vw - 32px),520px); --r:1.55; --fs:4.2; transition:min-height 1s cubic-bezier(.55,0,.25,1)}
-  .stage.open{min-height:calc(var(--h)*2 + 60px)}
+  .stage.open{min-height:calc(var(--h)*2 + var(--tk) + 60px)}
   .book.open{transform:translateY(var(--h))}
   .cover{transform-origin:center top}
   .book.open .cover{transform:rotateX(180deg)}
@@ -69,6 +87,7 @@ body{background:var(--bg);color:var(--hint);overflow-x:hidden}
 }
 @media (prefers-reduced-motion:reduce){
   .book,.cover,.stage{transition:none!important}
+  .book.open .ticket{animation-duration:.01s; animation-delay:0s}
 }
 </style>
 </head>
@@ -96,12 +115,22 @@ body{background:var(--bg);color:var(--hint);overflow-x:hidden}
         <div class="letter">
           <p>Dear Mom,</p>
           <p>Happy Birthday! I bet you can’t believe it’s not a Ghibli card.</p>
-          <p>I know very few moms that are running half marathons, even fewer that decide they might as well do a full marathon halfway through - that’s pretty cool. Excited to see what you’ll do next, hopefully not rock climbing or you’re going to be outshining me in no time.</p>
-          <p>It’s unfortunate that I can’t be there to celebrate with you today - we’ll just have to get extra boba, wine, and croissants in a few weeks to make up for the lost time. Hope you’ve been scouting some good boba shops (in addition to beer gardens). Looking forward to seeing you soon and excited to see what new achievements you conquer in this coming year.</p>
+          <p>I know very few moms that are running half marathons, even fewer that decide they might as well do a full marathon halfway through - that’s pretty impressive. I'm excited to see what you’ll do next, hopefully not rock climbing or you’re going to be outshining me in no time.</p>
+          <p>It’s too bad that I can’t be there to celebrate with you today - we’ll just have to get extra boba, wine, and croissants when I get there to make up for the lost time. Hope you’ve been scouting some good boba shops (in addition to beer gardens). Looking forward to seeing you soon and excited to see what new achievements you conquer in this coming year.</p>
           <p class="sign">Love,<br>Weston</p>
         </div>
       </div>
     </div>
+    <!-- Ticket that falls out when the card opens -->
+    <div class="ticket"><div class="tk">
+      <p class="a">You are invited to a performance of</p>
+      <p class="b">Robert Schumann’s</p>
+      <p class="c">“Le Paradis et la Péri”</p>
+      <p class="d">on November 27.</p>
+      <div class="orn"></div>
+      <p class="f">Transferable for one alternative family outing of your choice</p>
+      <div class="seal"></div>
+    </div></div>
   </div>
 </main>
 <p class="hint" id="hint">Tap the card to open it</p>
